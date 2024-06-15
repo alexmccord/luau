@@ -297,6 +297,7 @@ target_sources(Luau.Analysis PRIVATE
 
 # Luau.Analysis Sources
 target_sources(Luau.EqSat PRIVATE
+    EqSat/include/Luau/Bump.h
     EqSat/include/Luau/EGraph.h
     EqSat/include/Luau/Id.h
     EqSat/include/Luau/Language.h
@@ -304,6 +305,7 @@ target_sources(Luau.EqSat PRIVATE
     EqSat/include/Luau/Slice.h
     EqSat/include/Luau/UnionFind.h
 
+    EqSat/src/Bump.cpp
     EqSat/src/Id.cpp
     EqSat/src/UnionFind.cpp
 )
@@ -431,6 +433,7 @@ if(TARGET Luau.UnitTest)
         tests/DiffAsserts.cpp
         tests/DiffAsserts.h
         tests/Differ.test.cpp
+        tests/EqSat.bump.test.cpp
         tests/EqSat.language.test.cpp
         tests/EqSat.propositional.test.cpp
         tests/EqSat.slice.test.cpp

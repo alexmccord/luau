@@ -1,6 +1,7 @@
 // This file is part of the Luau programming language and is licensed under MIT License; see LICENSE.txt for details
 #include <doctest.h>
 
+#include "Luau/Bump.h"
 #include "Luau/Id.h"
 #include "Luau/Language.h"
 
@@ -35,7 +36,9 @@ TEST_CASE("node_equality")
 
 TEST_CASE("language_get")
 {
-    Value v{I32{5}};
+    EqSat::BumpAllocator bump;
+
+    Value v{bump.allocate<I32>(5)};
 
     auto i = v.get<I32>();
     REQUIRE(i);
@@ -46,7 +49,9 @@ TEST_CASE("language_get")
 
 TEST_CASE("language_copy_ctor")
 {
-    Value v1{I32{5}};
+    EqSat::BumpAllocator bump;
+
+    Value v1{bump.allocate<I32>(5)};
     Value v2 = v1;
 
     auto i1 = v1.get<I32>();
@@ -58,7 +63,9 @@ TEST_CASE("language_copy_ctor")
 
 TEST_CASE("language_move_ctor")
 {
-    Value v1{Str{"hello"}};
+    EqSat::BumpAllocator bump;
+
+    Value v1{bump.allocate<Str>("hello")};
     {
         auto s1 = v1.get<Str>();
         REQUIRE(s1);
@@ -78,11 +85,13 @@ TEST_CASE("language_move_ctor")
 
 TEST_CASE("language_equality")
 {
-    Value v1{I32{0}};
-    Value v2{I32{0}};
-    Value v3{I32{1}};
-    Value v4{Bool{true}};
-    Value v5{Add{EqSat::Id{0}, EqSat::Id{1}}};
+    EqSat::BumpAllocator bump;
+
+    Value v1{bump.allocate<I32>(0)};
+    Value v2{bump.allocate<I32>(0)};
+    Value v3{bump.allocate<I32>(1)};
+    Value v4{bump.allocate<Bool>(true)};
+    Value v5{bump.allocate<Add>(EqSat::Id{0}, EqSat::Id{1})};
 
     CHECK(v1 == v2);
     CHECK(v2 != v3);
@@ -92,12 +101,14 @@ TEST_CASE("language_equality")
 
 TEST_CASE("language_is_mappable")
 {
+    EqSat::BumpAllocator bump;
+
     std::unordered_map<Value, int, Value::Hash> map;
 
-    Value v1{I32{5}};
-    Value v2{I32{5}};
-    Value v3{Bool{true}};
-    Value v4{Add{EqSat::Id{0}, EqSat::Id{1}}};
+    Value v1{bump.allocate<I32>(5)};
+    Value v2{bump.allocate<I32>(5)};
+    Value v3{bump.allocate<Bool>(true)};
+    Value v4{bump.allocate<Add>(EqSat::Id{0}, EqSat::Id{1})};
 
     map[v1] = 1;
     map[v2] = 2;
@@ -128,10 +139,12 @@ TEST_CASE("node_field")
 
 TEST_CASE("language_operands")
 {
-    Value v1{I32{0}};
+    EqSat::BumpAllocator bump;
+
+    Value v1{bump.allocate<I32>(0)};
     CHECK(v1.operands().empty());
 
-    Value v2{Add{EqSat::Id{0}, EqSat::Id{1}}};
+    Value v2{bump.allocate<Add>(EqSat::Id{0}, EqSat::Id{1})};
     const Add* add = v2.get<Add>();
     REQUIRE(add);
 

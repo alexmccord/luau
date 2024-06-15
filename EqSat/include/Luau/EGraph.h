@@ -1,6 +1,7 @@
 // This file is part of the Luau programming language and is licensed under MIT License; see LICENSE.txt for details
 #pragma once
 
+#include "Luau/Bump.h"
 #include "Luau/Common.h"
 #include "Luau/Id.h"
 #include "Luau/Language.h"
@@ -75,8 +76,11 @@ class EGraph final
 
     VecDeque<std::pair<L, Id>> worklist;
 
+    BumpAllocator bump;
+
 private:
-    void canonicalize(L& enode)
+    template<typename T>
+    void canonicalize(T& enode)
     {
         // An e-node 𝑛 is canonical iff 𝑛 = canonicalize(𝑛), where
         // canonicalize(𝑓(𝑎1, 𝑎2, ...)) = 𝑓(find(𝑎1), find(𝑎2), ...).
@@ -84,7 +88,8 @@ private:
             id = find(id);
     }
 
-    bool isCanonical(const L& enode) const
+    template<typename T>
+    bool isCanonical(const T& enode) const
     {
         bool canonical = true;
         for (Id id : enode.operands())
@@ -158,24 +163,26 @@ public:
         return unionfind.find(id);
     }
 
-    std::optional<Id> lookup(const L& enode) const
+    template<typename T>
+    std::optional<Id> lookup(const T& enode) const
     {
         LUAU_ASSERT(isCanonical(enode));
 
-        if (auto it = hashcons.find(enode); it != hashcons.end())
+        if (auto it = hashcons.find(L{&enode}); it != hashcons.end())
             return it->second;
 
         return std::nullopt;
     }
 
-    Id add(L enode)
+    template<typename T>
+    Id add(T&& enode)
     {
         canonicalize(enode);
 
         if (auto id = lookup(enode))
             return *id;
 
-        Id id = makeEClass(enode);
+        Id id = makeEClass(L{bump.allocate<T>(std::forward<T>(enode))});
         return id;
     }
 
