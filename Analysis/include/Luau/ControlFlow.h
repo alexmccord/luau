@@ -1,6 +1,7 @@
 // This file is part of the Luau programming language and is licensed under MIT License; see LICENSE.txt for details
 #pragma once
 
+#include <cstdint>
 #include <memory>
 
 namespace Luau
@@ -9,7 +10,7 @@ namespace Luau
 struct Scope;
 using ScopePtr = std::shared_ptr<Scope>;
 
-enum class ControlFlow
+enum class ControlFlow : uint8_t
 {
     None = 0b00001,
     Returns = 0b00010,
