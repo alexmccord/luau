@@ -179,13 +179,16 @@ target_sources(Luau.Analysis PRIVATE
     Analysis/include/Luau/BuiltinDefinitions.h
     Analysis/include/Luau/BuiltinTypeFunctions.h
     Analysis/include/Luau/Cancellation.h
+    Analysis/include/Luau/Cfg/Analysis.h
+    Analysis/include/Luau/Cfg/Graph.h
+    Analysis/include/Luau/Cfg/Instruction.h
+    Analysis/include/Luau/Cfg/Node.h
     Analysis/include/Luau/Clone.h
     Analysis/include/Luau/Constraint.h
     Analysis/include/Luau/ConstraintGenerator.h
     Analysis/include/Luau/ConstraintSet.h
     Analysis/include/Luau/ConstraintSolver.h
     Analysis/include/Luau/ControlFlow.h
-    Analysis/include/Luau/ControlFlowGraph.h
     Analysis/include/Luau/DataFlowGraph.h
     Analysis/include/Luau/DcrLogger.h
     Analysis/include/Luau/Def.h
@@ -265,11 +268,13 @@ target_sources(Luau.Analysis PRIVATE
     Analysis/src/AutocompleteCore.cpp
     Analysis/src/BuiltinDefinitions.cpp
     Analysis/src/BuiltinTypeFunctions.cpp
+    Analysis/src/Cfg/Analysis.cpp
+    Analysis/src/Cfg/Graph.cpp
+    Analysis/src/Cfg/Node.cpp
     Analysis/src/Clone.cpp
     Analysis/src/Constraint.cpp
     Analysis/src/ConstraintGenerator.cpp
     Analysis/src/ConstraintSolver.cpp
-    Analysis/src/ControlFlowGraph.cpp
     Analysis/src/DataFlowGraph.cpp
     Analysis/src/DcrLogger.cpp
     Analysis/src/Def.cpp
@@ -469,6 +474,7 @@ if(TARGET Luau.UnitTest)
         tests/ConstraintGeneratorFixture.cpp
         tests/ConstraintGeneratorFixture.h
         tests/ConstraintSolver.test.cpp
+        tests/ControlFlowGraph.test.cpp
         tests/CostModel.test.cpp
         tests/DataFlowGraph.test.cpp
         tests/DenseHash.test.cpp
